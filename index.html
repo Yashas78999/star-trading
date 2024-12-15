@@ -9,19 +9,20 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
         }
         header {
-            background-color: #004080;
+            background-color: #2c3e50;
             color: white;
             text-align: center;
             padding: 20px;
         }
         section {
-            padding: 20px;
             display: none;
+            padding: 20px;
+            text-align: center;
         }
-        .main-section {
+        .main-menu {
             display: block;
             text-align: center;
             padding: 50px;
@@ -32,25 +33,27 @@
             margin: 10px;
             cursor: pointer;
             border: none;
-            background-color: #004080;
+            background-color: #2980b9;
             color: white;
             border-radius: 5px;
         }
         button:hover {
-            background-color: #003366;
+            background-color: #1f6391;
         }
-        .mining-interface {
-            text-align: center;
+        .mining-interface, .stock-graphs {
+            margin: 20px 0;
+        }
+        .mining-info {
             font-size: 20px;
-            margin: 30px 0;
+            margin-top: 30px;
         }
-        .stock-graphs iframe {
-            width: 100%;
+        iframe {
+            width: 80%;
             height: 400px;
-            margin-top: 10px;
+            margin: 20px 0;
         }
         footer {
-            background-color: #004080;
+            background-color: #2c3e50;
             color: white;
             text-align: center;
             padding: 10px;
@@ -64,31 +67,35 @@
 
     <header>
         <h1>Star Trading</h1>
+        <p>Explore Crypto Mining and Trading Platforms</p>
     </header>
 
-    <!-- Main Section -->
-    <section class="main-section" id="main-menu">
-        <h2>Choose an Option</h2>
-        <button onclick="showSection('crypto-mining')">Crypto Mining</button>
-        <button onclick="showSection('trading')">Trading</button>
+    <!-- Main Menu -->
+    <section class="main-menu" id="main-menu">
+        <h2>Choose Your Action</h2>
+        <button onclick="navigate('crypto-mining')">Crypto Mining</button>
+        <button onclick="navigate('trading')">Trading</button>
     </section>
 
     <!-- Crypto Mining Section -->
     <section id="crypto-mining">
         <h2>Crypto Mining</h2>
-        <button onclick="showMiningOption('wallet')">Wallet</button>
-        <button onclick="showMiningOption('start-mining')">Start Mining</button>
+        <p>Select an option below:</p>
+        <button onclick="showMining('wallet')">Wallet</button>
+        <button onclick="showMining('mining')">Start Mining</button>
 
-        <!-- Wallet Section -->
+        <!-- Wallet Info -->
         <div id="wallet" class="mining-interface" style="display: none;">
-            <p>Your Wallet Address: <strong>abc123xyz456</strong></p>
+            <p><strong>Wallet Address:</strong> <span>abc123xyz456</span></p>
         </div>
 
-        <!-- Start Mining Section -->
-        <div id="start-mining" class="mining-interface" style="display: none;">
+        <!-- Mining Simulation -->
+        <div id="mining" class="mining-interface" style="display: none;">
             <p>Mining in Progress...</p>
-            <p><strong>Hashrate:</strong> 50 MH/s</p>
-            <p><strong>Coins Mined:</strong> 0.002 BTC</p>
+            <div class="mining-info">
+                <p><strong>Hashrate:</strong> 45 MH/s</p>
+                <p><strong>Coins Mined:</strong> 0.005 BTC</p>
+            </div>
         </div>
 
         <button onclick="goBack()">Back</button>
@@ -97,22 +104,13 @@
     <!-- Trading Section -->
     <section id="trading">
         <h2>Stock Trading</h2>
-        <p>Explore stock performance of major companies.</p>
+        <p>Explore live stock market charts:</p>
 
-        <!-- Stock Graphs -->
+        <!-- Stock Charts -->
         <div class="stock-graphs">
-            <iframe 
-                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_a9f0c1&symbol=NASDAQ%3AAAPL&interval=D&range=1M&theme=light&style=1&locale=en"
-                title="Apple Stock Chart">
-            </iframe>
-            <iframe 
-                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_a9f0c2&symbol=NASDAQ%3AGOOG&interval=D&range=1M&theme=light&style=1&locale=en"
-                title="Google Stock Chart">
-            </iframe>
-            <iframe 
-                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_a9f0c3&symbol=NASDAQ%3AMSFT&interval=D&range=1M&theme=light&style=1&locale=en"
-                title="Microsoft Stock Chart">
-            </iframe>
+            <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_1&symbol=NASDAQ%3AAAPL&interval=D&theme=light"></iframe>
+            <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_2&symbol=NASDAQ%3AMSFT&interval=D&theme=light"></iframe>
+            <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_3&symbol=NASDAQ%3AGOOG&interval=D&theme=light"></iframe>
         </div>
 
         <button onclick="goBack()">Back</button>
@@ -123,28 +121,32 @@
     </footer>
 
     <script>
-        // Function to show the selected section
-        function showSection(sectionId) {
+        // Function to navigate between sections
+        function navigate(sectionId) {
+            // Hide all sections
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('crypto-mining').style.display = 'none';
             document.getElementById('trading').style.display = 'none';
+
+            // Show the selected section
             document.getElementById(sectionId).style.display = 'block';
         }
 
-        // Function to show the mining options
-        function showMiningOption(optionId) {
+        // Function to handle Crypto Mining sub-options
+        function showMining(optionId) {
+            // Hide both wallet and mining sections
             document.getElementById('wallet').style.display = 'none';
-            document.getElementById('start-mining').style.display = 'none';
+            document.getElementById('mining').style.display = 'none';
+
+            // Show the selected option
             document.getElementById(optionId).style.display = 'block';
         }
 
         // Function to go back to the main menu
         function goBack() {
-            document.getElementById('main-menu').style.display = 'block';
             document.getElementById('crypto-mining').style.display = 'none';
             document.getElementById('trading').style.display = 'none';
-            document.getElementById('wallet').style.display = 'none';
-            document.getElementById('start-mining').style.display = 'none';
+            document.getElementById('main-menu').style.display = 'block';
         }
     </script>
 
