@@ -7,89 +7,100 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
         header {
             background-color: #004080;
             color: white;
-            padding: 20px 0;
             text-align: center;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
+            padding: 20px;
         }
         section {
             padding: 20px;
+            display: none;
+        }
+        .main-section {
+            display: block;
             text-align: center;
+            padding: 50px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #004080;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        .mining-interface {
+            text-align: center;
+            font-size: 20px;
+            margin: 30px 0;
+        }
+        .stock-graphs iframe {
+            width: 100%;
+            height: 400px;
+            margin-top: 10px;
         }
         footer {
             background-color: #004080;
             color: white;
             text-align: center;
-            padding: 10px 0;
+            padding: 10px;
             position: fixed;
             bottom: 0;
             width: 100%;
-        }
-        .crypto-section, .stock-section {
-            background-color: #e8f4ff;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        iframe {
-            width: 100%;
-            height: 400px;
-            border: none;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Welcome to Star Trading</h1>
-        <nav>
-            <ul>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#mining">Crypto Mining</a></li>
-                <li><a href="#trading">Crypto Trading</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+        <h1>Star Trading</h1>
     </header>
 
-    <section id="about">
-        <h2>About Us</h2>
-        <p>Star Trading is a leading platform for cryptocurrency mining and trading, providing state-of-the-art solutions for crypto and stock enthusiasts.</p>
+    <!-- Main Section -->
+    <section class="main-section" id="main-menu">
+        <h2>Choose an Option</h2>
+        <button onclick="showSection('crypto-mining')">Crypto Mining</button>
+        <button onclick="showSection('trading')">Trading</button>
     </section>
 
-    <section id="mining" class="crypto-section">
+    <!-- Crypto Mining Section -->
+    <section id="crypto-mining">
         <h2>Crypto Mining</h2>
-        <p>We offer mining solutions for popular cryptocurrencies like Bitcoin, Ethereum, and Worldcoin.</p>
-        <div>
-            <p><strong>Current Cryptocurrency Prices:</strong></p>
-            <ul id="crypto-list">
-                <li>Loading prices...</li>
-            </ul>
+        <button onclick="showMiningOption('wallet')">Wallet</button>
+        <button onclick="showMiningOption('start-mining')">Start Mining</button>
+
+        <!-- Wallet Section -->
+        <div id="wallet" class="mining-interface" style="display: none;">
+            <p>Your Wallet Address: <strong>abc123xyz456</strong></p>
         </div>
+
+        <!-- Start Mining Section -->
+        <div id="start-mining" class="mining-interface" style="display: none;">
+            <p>Mining in Progress...</p>
+            <p><strong>Hashrate:</strong> 50 MH/s</p>
+            <p><strong>Coins Mined:</strong> 0.002 BTC</p>
+        </div>
+
+        <button onclick="goBack()">Back</button>
     </section>
 
-    <section id="trading" class="stock-section">
+    <!-- Trading Section -->
+    <section id="trading">
         <h2>Stock Trading</h2>
-        <p>Explore stock performance of major companies like Google, Microsoft, and Apple.</p>
-        <div>
+        <p>Explore stock performance of major companies.</p>
+
+        <!-- Stock Graphs -->
+        <div class="stock-graphs">
             <iframe 
                 src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_a9f0c1&symbol=NASDAQ%3AAAPL&interval=D&range=1M&theme=light&style=1&locale=en"
                 title="Apple Stock Chart">
@@ -103,13 +114,8 @@
                 title="Microsoft Stock Chart">
             </iframe>
         </div>
-    </section>
 
-    <section id="contact">
-        <h2>Contact Us</h2>
-        <p>Email: support@startrading.com | Phone: +123-456-7890</p>
-        <p>Follow us on social media for the latest updates:</p>
-        <p><a href="#">Twitter</a> | <a href="#">LinkedIn</a> | <a href="#">Facebook</a></p>
+        <button onclick="goBack()">Back</button>
     </section>
 
     <footer>
@@ -117,21 +123,29 @@
     </footer>
 
     <script>
-        // Fetch crypto prices using the CoinGecko API
-        const cryptoList = document.getElementById('crypto-list');
+        // Function to show the selected section
+        function showSection(sectionId) {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('crypto-mining').style.display = 'none';
+            document.getElementById('trading').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+        }
 
-        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,worldcoin&vs_currencies=usd')
-            .then(response => response.json())
-            .then(data => {
-                cryptoList.innerHTML = `
-                    <li>Bitcoin (BTC): $${data.bitcoin.usd}</li>
-                    <li>Ethereum (ETH): $${data.ethereum.usd}</li>
-                    <li>Worldcoin (WLD): $${data.worldcoin.usd}</li>
-                `;
-            })
-            .catch(err => {
-                cryptoList.innerHTML = `<li>Error fetching prices. Please try again later.</li>`;
-            });
+        // Function to show the mining options
+        function showMiningOption(optionId) {
+            document.getElementById('wallet').style.display = 'none';
+            document.getElementById('start-mining').style.display = 'none';
+            document.getElementById(optionId).style.display = 'block';
+        }
+
+        // Function to go back to the main menu
+        function goBack() {
+            document.getElementById('main-menu').style.display = 'block';
+            document.getElementById('crypto-mining').style.display = 'none';
+            document.getElementById('trading').style.display = 'none';
+            document.getElementById('wallet').style.display = 'none';
+            document.getElementById('start-mining').style.display = 'none';
+        }
     </script>
 
 </body>
